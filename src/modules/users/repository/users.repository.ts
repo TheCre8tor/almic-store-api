@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities/user.entity';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
@@ -22,7 +22,25 @@ export class UsersRepository {
     return user;
   }
 
-  async read(email: string): Promise<UserEntity> {
+  async read(): Promise<UserEntity[]> {
+    return await this.database.find();
+  }
+
+  async readOneById(id: string): Promise<UserEntity> {
+    return await this.database.findOneBy({ id });
+  }
+
+  async readByEmail(email: string): Promise<UserEntity> {
     return await this.database.findOneBy({ email });
+  }
+
+  async queryByEmail(email: string): Promise<UserEntity> {
+    const user = await this.database
+      .createQueryBuilder('users')
+      .addSelect('users.password')
+      .where('users.email=:email', { email: email })
+      .getOne();
+
+    return user;
   }
 }

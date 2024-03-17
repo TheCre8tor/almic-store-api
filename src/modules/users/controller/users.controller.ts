@@ -10,30 +10,63 @@ import {
 import { UsersService } from '../service/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { UserEntity } from '../entities/user.entity';
+import { AuthSignInDto } from '../dto/auth-signin.dto';
+import { JSendSuccessResponse } from 'src/shared/core/api.response';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('/signup')
-  async signup(@Body() dto: CreateUserDto): Promise<UserEntity> {
-    return await this.usersService.createUser(dto);
+  async signup(@Body() dto: CreateUserDto): Promise<JSendSuccessResponse> {
+    const response = await this.usersService.signup(dto);
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      message: 'Account created successfully',
+      data: response,
+    };
+
+    return data;
   }
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return 'Hi!';
+  @Post('/signin')
+  async signin(@Body() dto: AuthSignInDto): Promise<JSendSuccessResponse> {
+    const response = await this.usersService.signin(dto);
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      message: 'Successfully signin!',
+      data: response,
+    };
+
+    return data;
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async getUsers(): Promise<JSendSuccessResponse> {
+    const response = await this.usersService.getUsers();
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      message: 'Data fetched!',
+      data: response,
+    };
+
+    return data;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<JSendSuccessResponse> {
+    const response = await this.usersService.getUser(id);
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      message: 'Data fetched!',
+      data: response,
+    };
+
+    return data;
   }
 
   @Patch(':id')
