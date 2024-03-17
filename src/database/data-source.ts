@@ -20,10 +20,10 @@ const dataSourceOptions: DataSourceOptions = {
   username: APP_DB__USERNAME,
   password: APP_DB__PASSWORD,
   database: APP_DB__DATABASE,
-  entities: [],
+  entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: [],
   logging: true,
-  synchronize: false,
+  synchronize: true,
 };
 
 const dataSource = new DataSource(dataSourceOptions);
