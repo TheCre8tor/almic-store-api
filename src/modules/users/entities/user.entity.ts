@@ -10,6 +10,9 @@ export class UserEntity {
   name: string;
 
   @Column()
+  username: string;
+
+  @Column()
   email: string;
 
   @Column()
@@ -18,7 +21,8 @@ export class UserEntity {
   @Column({
     type: 'enum',
     enum: Roles,
-    default: Roles.USER,
+    array: true,
+    default: [Roles.USER],
   })
   roles: Roles;
 }
