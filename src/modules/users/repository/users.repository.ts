@@ -9,4 +9,9 @@ export class UsersRepository {
     @InjectRepository(UserEntity)
     private readonly database: Repository<UserEntity>,
   ) {}
+
+  async create(dto: any) {
+    const user = this.database.create(dto);
+    return await this.database.save(user);
+  }
 }

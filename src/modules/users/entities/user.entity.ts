@@ -1,9 +1,16 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Roles } from '../utilities/user-roles.enum';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 
 @Entity('users')
 export class UserEntity {
-  @PrimaryColumn({ primaryKeyConstraintName: 'pk_user_id' })
+  @PrimaryGeneratedColumn('uuid', { primaryKeyConstraintName: 'pk_user_id' })
   id: string;
 
   @Column()
