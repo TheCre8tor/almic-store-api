@@ -1,12 +1,15 @@
 import {
   BeforeInsert,
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
+  Timestamp,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Roles } from '../utilities/user-roles.enum';
-import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 
 @Entity('users')
 export class UserEntity {
@@ -19,10 +22,10 @@ export class UserEntity {
   @Column()
   username: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column({
@@ -32,4 +35,18 @@ export class UserEntity {
     default: [Roles.USER],
   })
   roles: Roles;
+
+  @CreateDateColumn()
+  created_at: Timestamp;
+
+  @UpdateDateColumn()
+  updated_at: Timestamp;
+
+  @DeleteDateColumn({ select: false })
+  deleted_at: Timestamp;
+
+  @BeforeInsert()
+  generateUsername() {
+    this.username = this.name.slice(0, 2) + 'XYZ';
+  }
 }

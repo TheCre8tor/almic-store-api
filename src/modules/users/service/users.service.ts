@@ -1,14 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UsersRepository } from '../repository/users.repository';
+import { UserEntity } from '../entities/user.entity';
+import { hash } from 'bcrypt';
+import { config } from 'dotenv';
+
+config();
+
+const { APP_APP__PASSWORD_HASH_ROUNDS } = process.env;
 
 @Injectable()
 export class UsersService {
   constructor(private readonly repository: UsersRepository) {}
 
-  async createUser(createUserDto: CreateUserDto) {
-    return await this.repository.create(createUserDto);
+  async createUser(dto: CreateUserDto): Promise<UserEntity> {
+    const message = 'User with the email exist in our system';
+
+    let userExist = await this.repository.read(dto.email);
+    if (userExist) throw new BadRequestException(message);
+
+    dto.password = await hash(
+      dto.password,
+      Number(APP_APP__PASSWORD_HASH_ROUNDS),
+    );
+
+    return await this.repository.create(dto);
   }
 
   findAll() {
