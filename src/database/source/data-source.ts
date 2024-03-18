@@ -22,7 +22,7 @@ const dataSourceOptions: DataSourceOptions = {
   database: APP_DB__DATABASE,
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/database/migrations/*{.ts,.js}'],
-  logging: true,
+  logging: false,
   synchronize: false,
 };
 
