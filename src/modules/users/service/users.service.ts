@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -11,6 +12,7 @@ import { compare, hash } from 'bcrypt';
 import { config } from 'dotenv';
 import { AuthSignInDto } from '../dto/auth-signin.dto';
 import { sign } from 'jsonwebtoken';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 config();
 
@@ -22,9 +24,12 @@ const {
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(private readonly repository: UsersRepository) {}
 
   async signup(dto: CreateUserDto): Promise<UserEntity> {
+    this.logger.log('hello world');
     const message = 'User with the email exist in our system';
 
     let userExist = await this.repository.readByEmail(dto.email);

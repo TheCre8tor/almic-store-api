@@ -12,13 +12,20 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { AuthSignInDto } from '../dto/auth-signin.dto';
 import { JSendSuccessResponse } from 'src/shared/core/api.response';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    @InjectPinoLogger(UsersController.name)
+    private readonly logger: PinoLogger,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('/signup')
   async signup(@Body() dto: CreateUserDto): Promise<JSendSuccessResponse> {
+    this.logger.assign({ userID: '42' });
+
     const response = await this.usersService.signup(dto);
 
     const data: JSendSuccessResponse = {
