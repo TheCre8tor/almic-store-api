@@ -3,6 +3,7 @@ import { AppModule } from './app/app.module';
 import { config } from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
+import { RequestExceptionFilter } from './shared/filters/request_exception_filter';
 
 config();
 
@@ -16,7 +17,7 @@ async function bootstrap() {
   app.setGlobalPrefix(APP_APP__VERSIONING);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-
+  app.useGlobalFilters(new RequestExceptionFilter());
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   await app.listen(APP_APP__PORT);

@@ -8,17 +8,12 @@ interface JSendSuccessResponse extends BaseApiResponse {
 }
 
 interface JSendFailedResponse extends BaseApiResponse {
-  data?: {
-    title?: string;
-    body?: string;
-  };
+  data?: any;
 }
 
 interface JSendErrorResponse extends BaseApiResponse {
   code?: number | string;
-  data?: {
-    type: string;
-  };
+  data?: any;
 }
 
 export { JSendSuccessResponse, JSendFailedResponse, JSendErrorResponse };
