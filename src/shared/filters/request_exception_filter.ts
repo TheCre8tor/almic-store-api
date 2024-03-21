@@ -1,24 +1,56 @@
-import { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
-import { Response } from 'express';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
 import {
   JSendErrorResponse,
   JSendFailedResponse,
 } from 'src/shared/core/api.response';
 
+import { pino } from 'pino';
+
+const logger = pino();
+
+@Catch()
 class RequestExceptionFilter implements ExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+
+  catch(exception: unknown, host: ArgumentsHost): void {
     const context = host.switchToHttp();
-    const hostResponse = context.getResponse<Response>();
-    const status = exception.getStatus();
-    const response = exception.getResponse() as Array<string> | string;
+    // const hostResponse = context.getResponse<Response>();
+    // const status = exception.getStatus();
+    // const response = exception.getResponse() as Array<string> | string;
+
+    const { httpAdapter } = this.httpAdapterHost;
+
+    const ctx = host.switchToHttp();
+
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
+
+    const response =
+      exception instanceof HttpException
+        ? exception.getResponse()
+        : { message: 'Oops! something went wrong!' };
 
     if (status >= 500) {
+      logger.error({
+        message: 'Internal server error',
+        error: console.log(ctx.getResponse()['err']),
+      });
+
       let data: JSendErrorResponse = {
         status: 'error',
         message: response['message'],
       };
 
-      return hostResponse.status(status).json(data);
+      return httpAdapter.reply(ctx.getResponse(), data, status);
     }
 
     let isSinleMessage = response['message'][0].length == 1;
@@ -35,7 +67,7 @@ class RequestExceptionFilter implements ExceptionFilter {
       },
     };
 
-    hostResponse.status(status).json(data);
+    httpAdapter.reply(ctx.getResponse(), data, status);
   }
 }
 

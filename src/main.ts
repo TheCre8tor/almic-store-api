@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { config } from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
@@ -17,7 +17,9 @@ async function bootstrap() {
   app.setGlobalPrefix(APP_APP__VERSIONING);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-  app.useGlobalFilters(new RequestExceptionFilter());
+
+  const httpAdapter = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new RequestExceptionFilter(httpAdapter));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   await app.listen(APP_APP__PORT);

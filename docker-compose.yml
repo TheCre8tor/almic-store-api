@@ -1,45 +1,46 @@
-version: '3.5'
+version: '3.8'
 
 services:
-  db:
-    image: postgres
-    restart: always
+  nest-backend:
+    container_name: nest-app
+    image: nest-api
+    build:
+      dockerfile: Dockerfile.development
+      context: .
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env
     environment:
-      - POSTGRES_SERVER=db
+      - APP_DB__HOST=postgres-db
+      - APP_DB__PORT=5432
+
+    networks:
+      - backend_network
+    volumes:
+      - ./src:/usr/src/app/src
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres-db
+    image: postgres:16
+    ports:
+      - 5431:5432
+    environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
       - POSTGRES_DB=almicapi
-    container_name: postgres
+    networks:
+      - backend_network
+    restart: unless-stopped
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
-    ports:
-      - '5432:5432'
+      - postgres_data:/var/lib/postgresql/data
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: nest-docker-postgres
-    environment:
-      - '8001:8001'
-      - DATABASE_URL=postgresql://postgres:password@db:5432/almicapi
+networks:
+  backend_network:
+    driver: bridge
 
-      - APP_DB__HOST=127.0.0.1
-      - APP_DB__PORT=5432
-      - APP_DB__USERNAME=postgres
-      - APP_DB__PASSWORD=password
-      - APP_DB__DATABASE=almicapi
-      - APP_APP__PORT=3000
-      - APP_APP__VERSIONING=api/v1
-      - APP_APP__PASSWORD_HASH_ROUNDS=10
-
-      - APP_APP__ACCESS_TOKEN_SECRET_KEY=UHF90_YTGF_890_OP
-      - APP_APP__ACCESS_TOKEN_EXPIRE_TIME=30m
-
-      - APP_APP__LOG_LEVEL="info"
-    ports:
-      - '3000:3000'
-    depends_on:
-      - db
-    volumes:
-      - ./src:/app/src
+volumes:
+  postgres_data: {}

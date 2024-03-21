@@ -27,7 +27,7 @@ export class UsersService {
 
     dto.password = await hash(
       dto.password,
-      this.config.get('PASSWORD_HASH_ROUNDS'),
+      parseInt(this.config.get('PASSWORD_HASH_ROUNDS')),
     );
 
     const createdUser = await this.repository.create(dto);
