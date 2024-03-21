@@ -1,14 +1,13 @@
 services:
   # A Docker web service
   - type: web
-    name: zero2prod
+    name: almicapi
     env: docker
     repo: https://github.com/TheCre8tor/almic-store-api.git # optional
     region: frankfurt # optional (defaults to oregon)
     plan: free # optional (defaults to starter)
     branch: main # optional (defaults to master)
     rootDir: .
-    # dockerCommand: ./almic-store-api # optional (defaults to Dockerfile command)
     numInstances: 1 # optional (defaults to 1)
     healthCheckPath: /api/v1/users/health-check
     envVars:
