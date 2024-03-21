@@ -22,6 +22,20 @@ export class UsersController {
     private readonly usersService: UsersService,
   ) {}
 
+  @Get('health-check')
+  async systemHealth() {
+    let response: JSendSuccessResponse = {
+      status: 'success',
+      message: 'system health status: [alive]',
+      data: {
+        title: 'almic-api service v1.0',
+        performance: 'stable',
+      },
+    };
+
+    return response;
+  }
+
   @Post('/signup')
   async signup(@Body() dto: CreateUserDto): Promise<JSendSuccessResponse> {
     this.logger.assign({ user_email: dto.email });

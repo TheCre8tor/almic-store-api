@@ -16,7 +16,7 @@ const {
 const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: APP_DB__HOST,
-  port: Number(APP_DB__PORT),
+  port: Number(APP_DB__PORT || 3000),
   username: APP_DB__USERNAME,
   password: APP_DB__PASSWORD,
   database: APP_DB__DATABASE,

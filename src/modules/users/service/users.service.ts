@@ -8,21 +8,16 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { UsersRepository } from '../repository/users.repository';
 import { UserEntity } from '../entities/user.entity';
 import { compare, hash } from 'bcrypt';
-import { config } from 'dotenv';
 import { AuthSignInDto } from '../dto/auth-signin.dto';
 import { sign } from 'jsonwebtoken';
-
-config();
-
-const {
-  APP_APP__PASSWORD_HASH_ROUNDS,
-  APP_APP__ACCESS_TOKEN_SECRET_KEY,
-  APP_APP__ACCESS_TOKEN_EXPIRE_TIME,
-} = process.env;
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly repository: UsersRepository) {}
+  constructor(
+    private readonly repository: UsersRepository,
+    private readonly config: ConfigService,
+  ) {}
 
   async signup(dto: CreateUserDto): Promise<UserEntity> {
     const message = 'User with the email exist in our system';
@@ -32,7 +27,7 @@ export class UsersService {
 
     dto.password = await hash(
       dto.password,
-      Number(APP_APP__PASSWORD_HASH_ROUNDS),
+      this.config.get('PASSWORD_HASH_ROUNDS'),
     );
 
     const createdUser = await this.repository.create(dto);
@@ -81,8 +76,10 @@ export class UsersService {
   private generateAccessToken(user: UserEntity): string {
     return sign(
       { id: user.id, email: user.email },
-      APP_APP__ACCESS_TOKEN_SECRET_KEY,
-      { expiresIn: APP_APP__ACCESS_TOKEN_EXPIRE_TIME },
+      this.config.get('TOKEN_SECRET_KEY'),
+      {
+        expiresIn: this.config.get('TOKEN_EXPIRE_TIME'),
+      },
     );
   }
 }
