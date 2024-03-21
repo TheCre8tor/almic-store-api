@@ -24,7 +24,7 @@ export class UsersController {
 
   @Post('/signup')
   async signup(@Body() dto: CreateUserDto): Promise<JSendSuccessResponse> {
-    this.logger.assign({ userID: '42' });
+    this.logger.assign({ user_email: dto.email });
 
     const response = await this.usersService.signup(dto);
 
@@ -39,8 +39,13 @@ export class UsersController {
 
   @Post('/signin')
   async signin(@Body() dto: AuthSignInDto): Promise<JSendSuccessResponse> {
-    const response = await this.usersService.signin(dto);
+    this.logger.assign({ user_email: dto.email });
 
+    this.logger.info('Signing user into the system: [START]');
+    const response = await this.usersService.signin(dto);
+    this.logger.info('Signing user into the system: [END]');
+
+    this.logger.info('Signed in successfully: [DONE]');
     const data: JSendSuccessResponse = {
       status: 'success',
       message: 'Successfully signin!',

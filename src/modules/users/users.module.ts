@@ -7,7 +7,7 @@ import { UserEntity } from './entities/user.entity';
 import { LoggerModule } from 'nestjs-pino';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), LoggerModule.forRoot()],
+  imports: [TypeOrmModule.forFeature([UserEntity])],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],
 })
