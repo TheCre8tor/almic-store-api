@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default (config: ConfigService) => ({
   pinoHttp: {
     autoLogging: false,
-    level: config.get('LOG_LEVEL') || 'trace',
+    level: 'info',
     genReqId: (request: Request) => {
       return request.headers['x-correlation-id'] || uuidv4();
     },

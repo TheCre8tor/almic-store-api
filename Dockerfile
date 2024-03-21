@@ -15,6 +15,8 @@ COPY --chown=node:node package*.json ./
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN yarn add ci
 
+RUN yarn ci
+
 # Bundle app source
 COPY --chown=node:node . .
 
@@ -40,7 +42,7 @@ COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modul
 COPY --chown=node:node . .
 
 # Run the build command which creates the production bundle
-RUN yarn run build
+RUN yarn build
 
 # Set NODE_ENV environment variable
 # ENV NODE_ENV production
@@ -48,7 +50,8 @@ RUN yarn run build
 # Running `npm ci` removes the existing node_modules directory.
 # Passing in --only=production ensures that only the production dependencies are installed.
 # This ensures that the node_modules directory is as optimized as possible.
-RUN yarn ci --only=production && yarn cache clean --force
+RUN yarn ci && yarn cache clean --force
+# RUN yarn ci --only=production && yarn cache clean --force
 
 USER node
 
