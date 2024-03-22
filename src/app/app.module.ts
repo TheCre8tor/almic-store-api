@@ -26,7 +26,7 @@ import { CurrentUserMiddleware } from 'src/modules/users/middlewares/current_use
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV}`,
+      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
       load: [configuration],
       cache: true,
     }),

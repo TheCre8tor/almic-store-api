@@ -8,12 +8,13 @@ services:
       dockerfile: Dockerfile.development
       context: .
     ports:
-      - 3000:3000
+      - 8080:8080
     env_file:
       - ./.env.development
     environment:
       - APP_DATABASE__HOST=postgres-db
       - APP_DATABASE__PORT=5432
+      - APP_APPLICATION__BASE_URL=0.0.0.0
 
     networks:
       - backend_network

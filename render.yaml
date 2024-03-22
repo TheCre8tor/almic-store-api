@@ -32,9 +32,19 @@ services:
           name: almicapi
           property: database
       - key: APP_APPLICATION__BASE_URL
-        sync: false
+        value: 0.0.0.0
       - key: APP_APPLICATION__PORT
         value: 3000
+      - key: APP_APPLICATION__VERSIONING
+        value: api/v1
+      - key: APP_APPLICATION__PASSWORD_HASH_ROUNDS
+        value: 10
+      - key: APP_APPLICATION__ACCESS_TOKEN_SECRET_KEY
+        value: UHF90_YTGF_890_OP
+      - key: APP_APPLICATION__ACCESS_TOKEN_EXPIRE_TIME
+        value: 30m
+      - key: APP_APPLICATION__LOG_LEVEL
+        value: info
       # - key: APP_REDIS__URI
       #   fromService:
       #     type: redis
