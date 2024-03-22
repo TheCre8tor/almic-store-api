@@ -11,29 +11,29 @@ services:
     numInstances: 1 # optional (defaults to 1)
     healthCheckPath: /api/v1/users/health-check
     envVars:
-      - key: APP_DB__USERNAME
+      - key: APP_DATABASE__USERNAME
         fromDatabase:
           name: almicapi
           property: user
-      - key: APP_DB__PASSWORD
+      - key: APP_DATABASE__PASSWORD
         fromDatabase:
           name: almicapi
           property: password
-      - key: APP_DB__HOST
+      - key: APP_DATABASE__HOST
         fromDatabase:
           name: almicapi
           property: host
-      - key: APP_DB__PORT
+      - key: APP_DATABASE__PORT
         fromDatabase:
           name: almicapi
           property: port
-      - key: APP_DB__DATABASE
+      - key: APP_DATABASE__DATABASE
         fromDatabase:
           name: almicapi
           property: database
       - key: APP_APPLICATION__BASE_URL
         sync: false
-      - key: APP_APP__PORT
+      - key: APP_APPLICATION__PORT
         value: 3000
       # - key: APP_REDIS__URI
       #   fromService:
