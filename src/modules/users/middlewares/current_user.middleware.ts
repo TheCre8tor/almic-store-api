@@ -7,7 +7,6 @@ export class CurrentUserMiddleware implements NestMiddleware {
     const authorization = req.headers.authorization;
 
     if (!authorization) {
-      console.log('No token');
       // do something -->
       next();
     } else {

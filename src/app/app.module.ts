@@ -42,9 +42,9 @@ import { CurrentUserMiddleware } from 'src/modules/users/middlewares/current_use
   providers: [],
 })
 export class AppModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer
-  //     .apply(CurrentUserMiddleware)
-  //     .forRoutes({ path: '*', method: RequestMethod.ALL });
-  // }
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CurrentUserMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
 }

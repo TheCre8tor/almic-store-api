@@ -33,6 +33,8 @@ export class UsersController {
       },
     };
 
+    this.logger.info('Checking system health status: [DONE]');
+
     return response;
   }
 
