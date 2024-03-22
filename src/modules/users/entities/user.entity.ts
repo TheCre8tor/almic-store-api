@@ -33,7 +33,6 @@ export class UserEntity {
     enum: Roles,
     array: true,
     default: [Roles.USER],
-    select: false,
   })
   roles: Roles;
 

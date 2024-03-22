@@ -10,10 +10,10 @@ services:
     ports:
       - 3000:3000
     env_file:
-      - ./.env
+      - ./.env.development
     environment:
-      - APP_DB__HOST=postgres-db
-      - APP_DB__PORT=5432
+      - APP_DATABASE__HOST=postgres-db
+      - APP_DATABASE__PORT=5432
 
     networks:
       - backend_network

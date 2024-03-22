@@ -40,7 +40,7 @@ export class CurrentUserMiddleware implements NestMiddleware {
       try {
         const { id } = verify(
           token,
-          this.config.get('APP_APP__ACCESS_TOKEN_SECRET_KEY'),
+          this.config.get('APP_APPLICATION__ACCESS_TOKEN_SECRET_KEY'),
         ) as JwtPayload;
 
         const currentUser = await this.usersService.getUser(id);
@@ -48,11 +48,11 @@ export class CurrentUserMiddleware implements NestMiddleware {
         req.currentUser = currentUser;
 
         next();
+        return;
       } catch (error) {
         this.logger.error(error);
-        throw new BadRequestException(
-          'Logging session expired, try loggin in again!',
-        );
+        req.currentUser = null;
+        next();
       }
     }
   }

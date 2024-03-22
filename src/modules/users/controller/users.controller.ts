@@ -6,15 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
-import { UsersService } from '../service/users.service';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
-import { AuthSignInDto } from '../dto/auth-signin.dto';
 import { JSendSuccessResponse } from 'src/shared/core/api.response';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { CurrentUser } from '../decorators/current_user.decorator';
+import { AuthSignInDto } from '../dto/auth-signin.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserEntity } from '../entities/user.entity';
+import { AuthenticationGuard } from '../guards/authentication.guard';
+import { AuthorizationGuard } from '../guards/authorization.guard';
+import { UsersService } from '../service/users.service';
+import { AuthorizeRoles } from '../decorators/authorize_roles.decorator';
+import { Roles } from '../utilities/user-roles.enum';
 
 @Controller('users')
 export class UsersController {
@@ -73,6 +78,8 @@ export class UsersController {
     return data;
   }
 
+  @AuthorizeRoles(Roles.ADMIN)
+  @UseGuards(AuthorizationGuard)
   @Get()
   async getUsers(): Promise<JSendSuccessResponse> {
     const response = await this.usersService.getUsers();
@@ -86,8 +93,8 @@ export class UsersController {
     return data;
   }
 
-  // custom param getter must be at the top of
-  @Get('/profile')
+  @UseGuards(AuthenticationGuard)
+  @Get('profile')
   getProfile(@CurrentUser() currentUser: UserEntity) {
     const data: JSendSuccessResponse = {
       status: 'success',

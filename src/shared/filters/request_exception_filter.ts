@@ -12,7 +12,6 @@ import {
 } from 'src/shared/core/api.response';
 
 import { pino } from 'pino';
-import { isArray } from 'class-validator';
 
 const logger = pino();
 

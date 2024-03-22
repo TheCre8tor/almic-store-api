@@ -7,14 +7,18 @@ import { RequestExceptionFilter } from './shared/filters/request_exception_filte
 
 config();
 
-const { APP_APP__PORT, APP_APP__VERSIONING } = process.env;
+const {
+  APP_APPLICATION__PORT,
+  APP_APPLICATION__VERSIONING,
+  APP_APPLICATION__BASE_URL,
+} = process.env;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   app.useLogger(app.get(Logger));
 
-  app.setGlobalPrefix(APP_APP__VERSIONING);
+  app.setGlobalPrefix(APP_APPLICATION__VERSIONING);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
@@ -22,7 +26,7 @@ async function bootstrap() {
   app.useGlobalFilters(new RequestExceptionFilter(httpAdapter));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
-  await app.listen(APP_APP__PORT);
+  await app.listen(APP_APPLICATION__PORT, APP_APPLICATION__BASE_URL);
 }
 
 bootstrap();

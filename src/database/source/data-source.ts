@@ -6,20 +6,20 @@ import { config } from 'dotenv';
 config();
 
 const {
-  APP_DB__HOST,
-  APP_DB__PORT,
-  APP_DB__USERNAME,
-  APP_DB__PASSWORD,
-  APP_DB__DATABASE,
+  APP_DATABASE__HOST,
+  APP_DATABASE__PORT,
+  APP_DATABASE__USERNAME,
+  APP_DATABASE__PASSWORD,
+  APP_DATABASE__DATABASE,
 } = process.env;
 
 const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: APP_DB__HOST,
-  port: Number(APP_DB__PORT || 3000),
-  username: APP_DB__USERNAME,
-  password: APP_DB__PASSWORD,
-  database: APP_DB__DATABASE,
+  host: APP_DATABASE__HOST,
+  port: Number(APP_DATABASE__PORT || 3000),
+  username: APP_DATABASE__USERNAME,
+  password: APP_DATABASE__PASSWORD,
+  database: APP_DATABASE__DATABASE,
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/database/migrations/*{.ts,.js}'],
   logging: false,
