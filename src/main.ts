@@ -4,6 +4,9 @@ import { config } from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { RequestExceptionFilter } from './shared/filters/request_exception_filter';
+import { pino } from 'pino';
+
+const logger = pino();
 
 config();
 
@@ -25,6 +28,10 @@ async function bootstrap() {
   const httpAdapter = app.get(HttpAdapterHost);
   app.useGlobalFilters(new RequestExceptionFilter(httpAdapter));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
+
+  logger.info(
+    `Server is running on - port: ${APP_APPLICATION__PORT} - host: ${APP_APPLICATION__BASE_URL} 🎉`,
+  );
 
   await app.listen(APP_APPLICATION__PORT, APP_APPLICATION__BASE_URL);
 }
