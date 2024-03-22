@@ -12,6 +12,7 @@ import {
 } from 'src/shared/core/api.response';
 
 import { pino } from 'pino';
+import { isArray } from 'class-validator';
 
 const logger = pino();
 
@@ -20,14 +21,9 @@ class RequestExceptionFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
-    const context = host.switchToHttp();
-    // const hostResponse = context.getResponse<Response>();
-    // const status = exception.getStatus();
-    // const response = exception.getResponse() as Array<string> | string;
-
     const { httpAdapter } = this.httpAdapterHost;
 
-    const ctx = host.switchToHttp();
+    const context = host.switchToHttp();
 
     const status =
       exception instanceof HttpException
@@ -42,7 +38,7 @@ class RequestExceptionFilter implements ExceptionFilter {
     if (status >= 500) {
       logger.error({
         message: 'Internal server error',
-        error: console.log(ctx.getResponse()['err']),
+        error: context.getResponse()['err'],
       });
 
       let data: JSendErrorResponse = {
@@ -50,7 +46,7 @@ class RequestExceptionFilter implements ExceptionFilter {
         message: response['message'],
       };
 
-      return httpAdapter.reply(ctx.getResponse(), data, status);
+      return httpAdapter.reply(context.getResponse(), data, status);
     }
 
     let isSinleMessage = response['message'][0].length == 1;
@@ -67,7 +63,7 @@ class RequestExceptionFilter implements ExceptionFilter {
       },
     };
 
-    httpAdapter.reply(ctx.getResponse(), data, status);
+    httpAdapter.reply(context.getResponse(), data, status);
   }
 }
 

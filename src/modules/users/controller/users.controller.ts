@@ -13,6 +13,8 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { AuthSignInDto } from '../dto/auth-signin.dto';
 import { JSendSuccessResponse } from 'src/shared/core/api.response';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { CurrentUser } from '../decorators/current_user.decorator';
+import { UserEntity } from '../entities/user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -79,6 +81,20 @@ export class UsersController {
       status: 'success',
       message: 'Data fetched!',
       data: response,
+    };
+
+    return data;
+  }
+
+  // custom param getter must be at the top of
+  @Get('/profile')
+  getProfile(@CurrentUser() currentUser: UserEntity) {
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      message: 'Data fetched!',
+      data: {
+        user: currentUser,
+      },
     };
 
     return data;
