@@ -16,10 +16,9 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserEntity } from '../entities/user.entity';
 import { AuthenticationGuard } from '../guards/authentication.guard';
-import { AuthorizationGuard } from '../guards/authorization.guard';
 import { UsersService } from '../service/users.service';
-import { AuthorizeRoles } from '../decorators/authorize_roles.decorator';
 import { Roles } from '../utilities/user-roles.enum';
+import { AuthorizationGuardMixin } from '../guards/roles.guard';
 
 @Controller('users')
 export class UsersController {
@@ -78,8 +77,22 @@ export class UsersController {
     return data;
   }
 
-  @AuthorizeRoles(Roles.ADMIN)
-  @UseGuards(AuthorizationGuard)
+  // @AuthorizeRoles(Roles.ADMIN)
+  // @UseGuards(AuthenticationGuard, AuthorizationGuard)
+  // @Get()
+  // async getUsers(): Promise<JSendSuccessResponse> {
+  //   const response = await this.usersService.getUsers();
+
+  //   const data: JSendSuccessResponse = {
+  //     status: 'success',
+  //     message: 'Data fetched!',
+  //     data: response,
+  //   };
+
+  //   return data;
+  // }
+
+  @UseGuards(AuthenticationGuard, AuthorizationGuardMixin([Roles.ADMIN]))
   @Get()
   async getUsers(): Promise<JSendSuccessResponse> {
     const response = await this.usersService.getUsers();
