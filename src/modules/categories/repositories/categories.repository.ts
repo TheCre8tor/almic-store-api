@@ -20,4 +20,12 @@ export class CategoriesRepository {
     category.added_by = user;
     return await this.database.save(category);
   }
+
+  async readById(id: string): Promise<CategoryEntity> {
+    return await this.database.findOneBy({ id });
+  }
+
+  async read(): Promise<CategoryEntity[]> {
+    return await this.database.find();
+  }
 }

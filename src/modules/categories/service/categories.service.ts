@@ -16,12 +16,12 @@ export class CategoriesService {
     return await this.repository.create(createCategoryDto, user);
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll(): Promise<CategoryEntity[]> {
+    return await this.repository.read();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string): Promise<CategoryEntity> {
+    return await this.repository.readById(id);
   }
 
   update(id: number, updateCategoryDto: UpdateCategoryDto) {

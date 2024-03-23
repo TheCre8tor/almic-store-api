@@ -16,6 +16,7 @@ import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { AuthenticationGuard } from 'src/modules/users/guards/authentication.guard';
 import { AuthorizationGuardMixin } from 'src/modules/users/guards/roles.guard';
 import { Roles } from 'src/modules/users/utilities/user-roles.enum';
+import { JSendSuccessResponse } from 'src/shared/core/api.response';
 
 @Controller('categories')
 export class CategoriesController {
@@ -23,21 +24,51 @@ export class CategoriesController {
 
   @UseGuards(AuthenticationGuard, AuthorizationGuardMixin([Roles.ADMIN]))
   @Post()
-  create(
+  async create(
     @Body() createCategoryDto: CreateCategoryDto,
     @CurrentUser() user: UserEntity,
-  ) {
-    return this.categoriesService.create(createCategoryDto, user);
+  ): Promise<JSendSuccessResponse> {
+    const response = await this.categoriesService.create(
+      createCategoryDto,
+      user,
+    );
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      data: {
+        category: response,
+      },
+    };
+
+    return data;
   }
 
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  async findAll(): Promise<JSendSuccessResponse> {
+    const response = await this.categoriesService.findAll();
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      data: {
+        categories: response,
+      },
+    };
+
+    return data;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<JSendSuccessResponse> {
+    const response = await this.categoriesService.findOne(id);
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      data: {
+        category: response,
+      },
+    };
+
+    return data;
   }
 
   @Patch(':id')
