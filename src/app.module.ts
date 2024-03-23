@@ -11,6 +11,7 @@ import pinoConfig from 'src/config/pino_logger.config';
 import { PinoTypeOrmLogger } from 'src/shared/core/typeorm_logger';
 import { CurrentUserMiddleware } from 'src/modules/users/middlewares/current_user.middleware';
 import { CategoriesModule } from 'src/modules/categories/categories.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { CategoriesModule } from 'src/modules/categories/categories.module';
     }),
     UsersModule,
     CategoriesModule,
+    ProductsModule,
   ],
   controllers: [],
   providers: [],
