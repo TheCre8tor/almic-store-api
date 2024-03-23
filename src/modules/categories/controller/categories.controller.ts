@@ -71,12 +71,23 @@ export class CategoriesController {
     return data;
   }
 
+  @UseGuards(AuthenticationGuard, AuthorizationGuardMixin([Roles.ADMIN]))
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoriesService.update(+id, updateCategoryDto);
+    const response = await this.categoriesService.update(id, updateCategoryDto);
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      message: `Category with id: ${id} is successfully submitted`,
+      data: {
+        category: response,
+      },
+    };
+
+    return data;
   }
 
   @Delete(':id')

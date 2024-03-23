@@ -24,8 +24,8 @@ export class CategoriesService {
     return await this.repository.readById(id);
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, dto: UpdateCategoryDto) {
+    return await this.repository.update(id, dto);
   }
 
   remove(id: number) {
