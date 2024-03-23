@@ -21,13 +21,12 @@ async function bootstrap() {
 
   app.useLogger(app.get(Logger));
 
-  app.setGlobalPrefix(APP_APPLICATION__VERSIONING);
-
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-
   const httpAdapter = app.get(HttpAdapterHost);
   app.useGlobalFilters(new RequestExceptionFilter(httpAdapter));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+
+  app.setGlobalPrefix(APP_APPLICATION__VERSIONING);
 
   logger.info(
     `Server is running on - port: ${APP_APPLICATION__PORT} - host: ${APP_APPLICATION__BASE_URL} 🎉`,

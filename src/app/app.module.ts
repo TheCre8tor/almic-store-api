@@ -11,6 +11,8 @@ import pinoConfig from 'src/config/pino_logger.config';
 import { PinoTypeOrmLogger } from 'src/shared/core/typeorm_logger';
 import { CurrentUserMiddleware } from 'src/modules/users/middlewares/current_user.middleware';
 
+console.log(`Environment: ${process.env.NODE_ENV}`);
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -26,7 +28,7 @@ import { CurrentUserMiddleware } from 'src/modules/users/middlewares/current_use
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+      envFilePath: `.env.${process.env.NODE_ENV}`,
       load: [configuration],
       cache: true,
     }),

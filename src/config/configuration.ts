@@ -9,6 +9,8 @@ const {
   APP_APPLICATION__ACCESS_TOKEN_EXPIRE_TIME,
 } = env;
 
+console.log(`NODE_ENV: ${NODE_ENV}`);
+
 config();
 
 export default () => ({
