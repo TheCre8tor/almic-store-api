@@ -4,12 +4,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
 import { Roles } from '../utilities/user-roles.enum';
-import { OmitType, PartialType } from '@nestjs/mapped-types';
+import { CategoryEntity } from 'src/modules/categories/entities/category.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -44,6 +45,11 @@ export class UserEntity {
 
   @DeleteDateColumn({ select: false })
   deleted_at: Timestamp;
+
+  @OneToMany(() => CategoryEntity, (category) => category.added_by, {
+    cascade: ['remove'],
+  })
+  categories: CategoryEntity[];
 
   @BeforeInsert()
   generateUsername() {

@@ -10,8 +10,7 @@ import configuration from 'src/config/configuration';
 import pinoConfig from 'src/config/pino_logger.config';
 import { PinoTypeOrmLogger } from 'src/shared/core/typeorm_logger';
 import { CurrentUserMiddleware } from 'src/modules/users/middlewares/current_user.middleware';
-
-console.log(`Environment: ${process.env.NODE_ENV}`);
+import { CategoriesModule } from 'src/modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -40,6 +39,7 @@ console.log(`Environment: ${process.env.NODE_ENV}`);
       },
     }),
     UsersModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [],
