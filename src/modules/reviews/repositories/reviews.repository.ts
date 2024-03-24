@@ -30,6 +30,28 @@ export class ReviewsRepository {
     return await this.reviewsRepository.save(review);
   }
 
+  async readById(review_id: string): Promise<ReviewEntity> {
+    return await this.reviewsRepository.findOne({
+      where: { id: review_id },
+      relations: { user: true, product: { category: true } },
+      select: {
+        user: {
+          id: true,
+          name: true,
+          email: true,
+        },
+        product: {
+          id: true,
+          title: true,
+          category: {
+            id: true,
+            title: true,
+          },
+        },
+      },
+    });
+  }
+
   async readByUserAndProductId(
     user_id: string,
     product_id: string,

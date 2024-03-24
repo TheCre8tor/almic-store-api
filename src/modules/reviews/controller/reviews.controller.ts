@@ -44,8 +44,17 @@ export class ReviewsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reviewsService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<JSendSuccessResponse> {
+    const response = await this.reviewsService.findOne(id);
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      data: {
+        review: response,
+      },
+    };
+
+    return data;
   }
 
   @Patch(':id')
