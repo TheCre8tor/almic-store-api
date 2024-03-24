@@ -12,6 +12,7 @@ import { PinoTypeOrmLogger } from 'src/shared/core/typeorm_logger';
 import { CurrentUserMiddleware } from 'src/modules/users/middlewares/current_user.middleware';
 import { CategoriesModule } from 'src/modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ProductsModule } from './modules/products/products.module';
     UsersModule,
     CategoriesModule,
     ProductsModule,
+    ReviewsModule,
   ],
   controllers: [],
   providers: [],
