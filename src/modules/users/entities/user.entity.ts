@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Roles } from '../utilities/user-roles.enum';
 import { CategoryEntity } from 'src/modules/categories/entities/category.entity';
+import { ProductEntity } from 'src/modules/products/entities/product.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -50,6 +51,9 @@ export class UserEntity {
     cascade: ['remove'],
   })
   categories: CategoryEntity[];
+
+  @OneToMany(() => ProductEntity, (product) => product.added_by)
+  products: ProductEntity[];
 
   @BeforeInsert()
   generateUsername() {

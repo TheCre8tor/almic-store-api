@@ -1,3 +1,4 @@
+import { ProductEntity } from 'src/modules/products/entities/product.entity';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
   UpdateDateColumn,
@@ -37,4 +39,7 @@ export class CategoryEntity {
   })
   @JoinColumn({ name: 'added_by_id' })
   added_by: UserEntity;
+
+  @OneToMany(() => ProductEntity, (product) => product.category)
+  products: ProductEntity[]
 }
