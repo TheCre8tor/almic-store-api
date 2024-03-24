@@ -1,10 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from '../entities/product.entity';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
-import { CategoriesRepository } from 'src/modules/categories/repositories/categories.repository';
 import { CategoryEntity } from 'src/modules/categories/entities/category.entity';
 
 @Injectable()
@@ -63,13 +62,12 @@ export class ProductsRepository {
     });
   }
 
+  async update(product: ProductEntity): Promise<ProductEntity> {
+    const entity = this.database.create(product);
+    return await this.database.save(entity);
+  }
+
   async delete(id: string): Promise<any> {
-    const product = await this.readById(id);
-
-    if (!product) {
-      throw new NotFoundException("You can't delete what doesn't exist");
-    }
-
     await this.database.softDelete(id);
   }
 }

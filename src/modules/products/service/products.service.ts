@@ -43,11 +43,29 @@ export class ProductsService {
     return response;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(
+    id: string,
+    updateProductDto: Partial<UpdateProductDto>,
+    user: UserEntity,
+  ): Promise<ProductEntity> {
+    const product = await this.findOne(id);
+
+    Object.assign(product, updateProductDto);
+
+    product.added_by = user;
+
+    if (updateProductDto.category_id) {
+      const category = await this.categoryRepository.readById(
+        updateProductDto.category_id,
+      );
+      product.category = category;
+    }
+
+    return await this.repository.update(product);
   }
 
   async remove(id: string): Promise<ProductEntity> {
-    return await this.repository.delete(id);
+    const product = await this.findOne(id);
+    if (product) return await this.repository.delete(id);
   }
 }

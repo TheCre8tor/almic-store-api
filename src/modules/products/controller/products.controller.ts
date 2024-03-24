@@ -59,14 +59,32 @@ export class ProductsController {
     return data;
   }
 
+  @UseGuards(AuthenticationGuard, AuthorizationGuardMixin([Roles.ADMIN]))
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(+id, updateProductDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+    @CurrentUser() user: UserEntity,
+  ) {
+    const response = await this.productsService.update(
+      id,
+      updateProductDto,
+      user,
+    );
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      data: {
+        product: response,
+      },
+    };
+
+    return data;
   }
 
   @UseGuards(AuthenticationGuard, AuthorizationGuardMixin([Roles.ADMIN]))
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<JSendSuccessResponse> {
     await this.productsService.remove(id);
 
     const data: JSendSuccessResponse = {
