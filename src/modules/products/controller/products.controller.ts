@@ -16,6 +16,7 @@ import { AuthorizationGuardMixin } from 'src/modules/users/guards/roles.guard';
 import { Roles } from 'src/modules/users/utilities/user-roles.enum';
 import { CurrentUser } from 'src/modules/users/decorators/current_user.decorator';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
+import { JSendSuccessResponse } from 'src/shared/core/api.response';
 
 @Controller('products')
 export class ProductsController {
@@ -36,8 +37,17 @@ export class ProductsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const response = await this.productsService.findOne(id);
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      data: {
+        product: response,
+      },
+    };
+
+    return data;
   }
 
   @Patch(':id')

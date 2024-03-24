@@ -25,4 +25,23 @@ export class ProductsRepository {
 
     return await this.database.save(product);
   }
+
+  async readById(id: string): Promise<ProductEntity> {
+    return await this.database.findOne({
+      where: { id },
+      relations: { added_by: true, category: true },
+      select: {
+        added_by: {
+          id: true,
+          name: true,
+          email: true,
+        },
+        category: {
+          id: true,
+          title: true,
+          description: true,
+        },
+      },
+    });
+  }
 }
