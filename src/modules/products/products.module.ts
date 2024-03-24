@@ -10,5 +10,6 @@ import { ProductsRepository } from './repositories/products.repository.dto';
   imports: [TypeOrmModule.forFeature([ProductEntity]), CategoriesModule],
   controllers: [ProductsController],
   providers: [ProductsService, ProductsRepository],
+  exports: [ProductsService],
 })
 export class ProductsModule {}
