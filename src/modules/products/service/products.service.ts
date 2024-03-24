@@ -47,7 +47,7 @@ export class ProductsService {
     return `This action updates a #${id} product`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: string): Promise<ProductEntity> {
+    return await this.repository.delete(id);
   }
 }

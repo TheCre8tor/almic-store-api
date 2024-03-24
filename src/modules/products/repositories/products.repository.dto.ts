@@ -62,4 +62,14 @@ export class ProductsRepository {
       },
     });
   }
+
+  async delete(id: string): Promise<any> {
+    const product = await this.readById(id);
+
+    if (!product) {
+      throw new NotFoundException("You can't delete what doesn't exist");
+    }
+
+    await this.database.softDelete(id);
+  }
 }

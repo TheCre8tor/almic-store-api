@@ -64,8 +64,16 @@ export class ProductsController {
     return this.productsService.update(+id, updateProductDto);
   }
 
+  @UseGuards(AuthenticationGuard, AuthorizationGuardMixin([Roles.ADMIN]))
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+    await this.productsService.remove(id);
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      message: `Product: ${id} deleted successfully`,
+    };
+
+    return data;
   }
 }
