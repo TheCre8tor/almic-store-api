@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ReviewsService } from '../service/reviews.service';
 import { CreateReviewDto } from '../dto/create-review.dto';
@@ -39,8 +40,19 @@ export class ReviewsController {
   }
 
   @Get()
-  findAll() {
-    return this.reviewsService.findAll();
+  async findAll(
+    @Query('product_id') product_id: string,
+  ): Promise<JSendSuccessResponse> {
+    const response = await this.reviewsService.findAll(product_id);
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      data: {
+        reviews: response,
+      },
+    };
+
+    return data;
   }
 
   @Get(':id')
@@ -55,15 +67,5 @@ export class ReviewsController {
     };
 
     return data;
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
-    return this.reviewsService.update(+id, updateReviewDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reviewsService.remove(+id);
   }
 }

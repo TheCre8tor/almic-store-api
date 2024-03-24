@@ -35,8 +35,12 @@ export class ReviewsService {
     return await this.reviewsRepository.create(createReviewDto, product, user);
   }
 
-  findAll() {
-    return `This action returns all reviews`;
+  async findAll(product_id: string): Promise<ReviewEntity[]> {
+    const reviews = await this.reviewsRepository.read(product_id);
+
+    if (reviews.length === 0) return [];
+
+    return reviews;
   }
 
   async findOne(id: string): Promise<ReviewEntity> {
@@ -45,13 +49,5 @@ export class ReviewsService {
     if (!review) throw new NotFoundException('Review not found');
 
     return review;
-  }
-
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} review`;
   }
 }
