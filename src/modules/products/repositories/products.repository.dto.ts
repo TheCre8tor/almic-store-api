@@ -44,4 +44,22 @@ export class ProductsRepository {
       },
     });
   }
+
+  async read(): Promise<ProductEntity[]> {
+    return await this.database.find({
+      relations: { added_by: true, category: true },
+      select: {
+        added_by: {
+          id: true,
+          name: true,
+          email: true,
+        },
+        category: {
+          id: true,
+          title: true,
+          description: true,
+        },
+      },
+    });
+  }
 }

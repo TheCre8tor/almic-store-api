@@ -32,12 +32,21 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  async findAll(): Promise<JSendSuccessResponse> {
+    const response = await this.productsService.findAll();
+
+    const data: JSendSuccessResponse = {
+      status: 'success',
+      data: {
+        products: response,
+      },
+    };
+
+    return data;
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<JSendSuccessResponse> {
     const response = await this.productsService.findOne(id);
 
     const data: JSendSuccessResponse = {
@@ -56,7 +65,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.productsService.remove(+id);
   }
 }

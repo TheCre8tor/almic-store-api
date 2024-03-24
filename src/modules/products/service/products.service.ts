@@ -27,8 +27,12 @@ export class ProductsService {
     return await this.repository.create(createProductDto, categoryExist, user);
   }
 
-  async findAll() {
-    return `This action returns all products`;
+  async findAll(): Promise<ProductEntity[]> {
+    const response = await this.repository.read();
+
+    if (response.length === 0) return [];
+
+    return response;
   }
 
   async findOne(id: string): Promise<ProductEntity> {
